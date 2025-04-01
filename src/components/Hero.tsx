@@ -79,17 +79,30 @@ const Hero = () => {
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !email.includes('@')) return;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
     
     try {
-      // With Netlify Forms, the form will be submitted directly to Netlify
-      // We're just handling the client-side UX here
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 3000);
-      setEmail('');
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
       
-      // Still store in localStorage for immediate feedback
-      localStorage.setItem('subscribedEmail', email);
+      if (data.success) {
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+        setEmail('');
+        localStorage.setItem('subscribedEmail', email);
+      } else {
+        alert(data.error || 'Something went wrong. Please try again.');
+      }
     } catch (error) {
       console.error('Error submitting email:', error);
       alert('Something went wrong. Please try again.');
@@ -120,55 +133,47 @@ const Hero = () => {
       return;
     }
     
-    // Convert tipAmount to a number
-    const amount = parseFloat(tipFormData.tipAmount.replace(/[^0-9.]/g, ''));
-    
     try {
-      // Add the tip to our context for immediate UI and reaction system update
-      addTip({
-        sender: tipFormData.name,
-        recipient: tipFormData.recipientName,
-        amount: isNaN(amount) ? 10 : amount, // Default to 10 if parsing fails
-        note: tipFormData.message || 'Thanks for your help!'
+      const response = await fetch('/api/tips', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tipFormData),
       });
+
+      const data = await response.json();
       
-      // With Netlify Forms, the form data will be automatically collected
-      // No need for custom API calls
-      
-      // Show success state
-      setTipFormSubmitted(true);
-      
-      // Close form after delay
-      setTimeout(() => {
-        setTipFormSubmitted(false);
-        setShowTipForm(false);
-        // Reset form
-        setTipFormData({
-          name: '',
-          email: '',
-          recipientName: '',
-          recipientEmail: '',
-          message: '',
-          tipAmount: ''
+      if (data.success) {
+        // Add the tip to our context for immediate UI update
+        const amount = parseFloat(tipFormData.tipAmount.replace(/[^0-9.]/g, ''));
+        addTip({
+          sender: tipFormData.name,
+          recipient: tipFormData.recipientName,
+          amount: isNaN(amount) ? 10 : amount,
+          note: tipFormData.message || 'Thanks for your help!'
         });
-      }, 3000);
+        
+        setTipFormSubmitted(true);
+        
+        setTimeout(() => {
+          setTipFormSubmitted(false);
+          setShowTipForm(false);
+          setTipFormData({
+            name: '',
+            email: '',
+            recipientName: '',
+            recipientEmail: '',
+            message: '',
+            tipAmount: ''
+          });
+        }, 3000);
+      } else {
+        alert(data.error || 'Failed to submit tip. Please try again.');
+      }
     } catch (error) {
       console.error('Error submitting tip:', error);
-      // Still show success since the tip was added to context
-      setTipFormSubmitted(true);
-      
-      setTimeout(() => {
-        setTipFormSubmitted(false);
-        setShowTipForm(false);
-        setTipFormData({
-          name: '',
-          email: '',
-          recipientName: '',
-          recipientEmail: '',
-          message: '',
-          tipAmount: ''
-        });
-      }, 3000);
+      alert('Something went wrong. Please try again.');
     }
   };
 

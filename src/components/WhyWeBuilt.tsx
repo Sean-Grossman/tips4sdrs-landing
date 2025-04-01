@@ -284,6 +284,7 @@ export default function WhyWeBuilt() {
   
   // Submit tip function
   const submitTip = () => {
+    console.log('Submitting tip:', tipValue);
     // Extract numeric value from input
     let numberValue = tipValue;
     if (numberValue.endsWith('%')) {

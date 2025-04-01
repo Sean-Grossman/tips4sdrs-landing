@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import connectDB from '@/lib/mongodb';
+import Subscription from '@/models/Subscription';
 
 // Simple email validation
 function isValidEmail(email: string): boolean {
@@ -9,49 +9,37 @@ function isValidEmail(email: string): boolean {
 }
 
 // Store emails in a JSON file
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { email } = await request.json();
+    await connectDB();
+    const data = await req.json();
     
-    if (!email || !isValidEmail(email)) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Valid email is required' 
-      }, { status: 400 });
+    if (!data.email || !data.email.includes('@')) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid email address' },
+        { status: 400 }
+      );
     }
-    
-    // Path to our emails storage file
-    const dataDir = path.join(process.cwd(), 'data');
-    const filePath = path.join(dataDir, 'subscribers.json');
-    
-    // Create data directory if it doesn't exist
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
+
+    // Check if email already exists
+    const existingSubscription = await Subscription.findOne({ email: data.email });
+    if (existingSubscription) {
+      return NextResponse.json(
+        { success: false, error: 'Email already subscribed' },
+        { status: 400 }
+      );
     }
-    
-    // Read existing emails or create empty array
-    let subscribers: string[] = [];
-    if (fs.existsSync(filePath)) {
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      subscribers = JSON.parse(fileContent);
-    }
-    
-    // Only add email if it's not already in the list
-    if (!subscribers.includes(email)) {
-      subscribers.push(email);
-      fs.writeFileSync(filePath, JSON.stringify(subscribers, null, 2));
-    }
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Email successfully saved' 
+
+    const subscription = await Subscription.create({
+      email: data.email
     });
-    
+
+    return NextResponse.json({ success: true, subscription });
   } catch (error) {
-    console.error('Error saving email:', error);
-    return NextResponse.json({ 
-      success: false, 
-      message: 'Server error' 
-    }, { status: 500 });
+    console.error('Error saving subscription:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to save subscription' },
+      { status: 500 }
+    );
   }
 }
