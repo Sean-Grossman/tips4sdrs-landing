@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
 
-/* Import Tailwind directives - using comments to avoid lint errors */
-/* purgecss start ignore */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-/* purgecss end ignore */
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --primary-bg: #EDE3DC;
@@ -16,11 +14,13 @@
   --link-blue: #1E90FF;
   --text: #2E2E2E;
   --text-muted: #5A5A5A;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-open-sans: 'Open Sans', sans-serif;
 }
 
 html,
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-open-sans);
   color: var(--text);
   background: var(--primary-bg);
   scroll-behavior: smooth;
@@ -28,7 +28,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat);
   font-weight: 700;
 }
 
@@ -62,7 +62,7 @@ p {
 .cta-button {
   background-color: var(--cta);
   color: white;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-open-sans);
   font-weight: 600;
   font-size: 16px;
   padding: 12px 24px;
@@ -92,7 +92,7 @@ p {
 }
 
 .nav-link {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-open-sans);
   font-size: 14px;
   color: var(--text);
   text-transform: uppercase;

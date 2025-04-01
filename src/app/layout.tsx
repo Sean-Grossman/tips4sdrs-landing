@@ -17,6 +17,7 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: 'Tips4SDRs.org | Recognize Your Sales Development Reps',
   description: 'Tips4SDRs.org - Where you can show appreciation to the SDRs who helped close your deals',
+  metadataBase: new URL('https://tips4sdrs.org'),
   openGraph: {
     title: 'Tips4SDRs.org | Recognize Your Sales Development Reps',
     description: 'Where you can show appreciation to the SDRs who helped close your deals',
@@ -45,7 +46,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${openSans.variable}`}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className={`${montserrat.variable} ${openSans.variable} font-sans bg-background text-text`}>
         {children}
       </body>
     </html>
