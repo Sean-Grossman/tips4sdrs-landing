@@ -17,6 +17,25 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: 'Tips4SDRs.org | Recognize Your Sales Development Reps',
   description: 'Tips4SDRs.org - Where you can show appreciation to the SDRs who helped close your deals',
+  openGraph: {
+    title: 'Tips4SDRs.org | Recognize Your Sales Development Reps',
+    description: 'Where you can show appreciation to the SDRs who helped close your deals',
+    images: [
+      {
+        url: '/images/coverImage.png',
+        width: 1200,
+        height: 630,
+        alt: 'Tips4SDRs - Show appreciation to your sales development reps',
+      }
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tips4SDRs.org | Recognize Your Sales Development Reps',
+    description: 'Where you can show appreciation to the SDRs who helped close your deals',
+    images: ['/images/coverImage.png'],
+  },
 }
 
 export default function RootLayout({
