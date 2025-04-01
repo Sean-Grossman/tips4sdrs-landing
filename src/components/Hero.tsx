@@ -82,24 +82,32 @@ const Hero = () => {
     if (!email || !email.includes('@')) return;
     
     try {
-      // In a real app, you would send this to your API
-      console.log('Email submitted:', email);
+      // Send email to our API endpoint
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
       
-      // For now, we'll just simulate storing it
-      localStorage.setItem('subscribedEmail', email);
+      const data = await response.json();
       
-      // Show the notification
-      setShowNotification(true);
-      
-      // Clear the form
-      setEmail('');
-      
-      // Hide notification after 5 seconds
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
+      if (data.success) {
+        // Still store in localStorage for immediate feedback
+        localStorage.setItem('subscribedEmail', email);
+        
+        // Show success notification
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+        setEmail('');
+      } else {
+        console.error('Failed to save email:', data.message);
+        alert('Something went wrong. Please try again.');
+      }
     } catch (error) {
       console.error('Error submitting email:', error);
+      alert('Something went wrong. Please try again.');
     }
   };
   
@@ -111,7 +119,7 @@ const Hero = () => {
     }));
   };
   
-  const handleTipFormSubmit = (e: React.FormEvent) => {
+  const handleTipFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -130,34 +138,73 @@ const Hero = () => {
     // Convert tipAmount to a number
     const amount = parseFloat(tipFormData.tipAmount.replace(/[^0-9.]/g, ''));
     
-    // Add the tip to our context
-    addTip({
-      sender: tipFormData.name,
-      recipient: tipFormData.recipientName,
-      amount: isNaN(amount) ? 10 : amount, // Default to 10 if parsing fails
-      note: tipFormData.message || 'Thanks for your help!'
-    });
-    
-    // Process form submission
-    console.log('Tip form submitted:', tipFormData);
-    
-    // Show success state
-    setTipFormSubmitted(true);
-    
-    // Close form after delay
-    setTimeout(() => {
-      setTipFormSubmitted(false);
-      setShowTipForm(false);
-      // Reset form
-      setTipFormData({
-        name: '',
-        email: '',
-        recipientName: '',
-        recipientEmail: '',
-        message: '',
-        tipAmount: ''
+    try {
+      // First, add the tip to our context for immediate UI feedback
+      addTip({
+        sender: tipFormData.name,
+        recipient: tipFormData.recipientName,
+        amount: isNaN(amount) ? 10 : amount, // Default to 10 if parsing fails
+        note: tipFormData.message || 'Thanks for your help!'
       });
-    }, 3000);
+      
+      // Then, send the complete tip data to our API
+      const response = await fetch('/api/tips', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: tipFormData.name,
+          email: tipFormData.email,
+          recipientName: tipFormData.recipientName,
+          recipientEmail: tipFormData.recipientEmail,
+          message: tipFormData.message,
+          amount: isNaN(amount) ? 10 : amount
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        console.error('Failed to save tip data:', data.message);
+        // Continue with UI flow since we've already updated the context
+      }
+      
+      // Show success state
+      setTipFormSubmitted(true);
+      
+      // Close form after delay
+      setTimeout(() => {
+        setTipFormSubmitted(false);
+        setShowTipForm(false);
+        // Reset form
+        setTipFormData({
+          name: '',
+          email: '',
+          recipientName: '',
+          recipientEmail: '',
+          message: '',
+          tipAmount: ''
+        });
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting tip:', error);
+      // Still show success since the tip was added to context
+      setTipFormSubmitted(true);
+      
+      setTimeout(() => {
+        setTipFormSubmitted(false);
+        setShowTipForm(false);
+        setTipFormData({
+          name: '',
+          email: '',
+          recipientName: '',
+          recipientEmail: '',
+          message: '',
+          tipAmount: ''
+        });
+      }, 3000);
+    }
   };
 
   return (
