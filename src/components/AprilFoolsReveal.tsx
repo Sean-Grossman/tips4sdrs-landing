@@ -13,23 +13,22 @@ export default function AprilFoolsReveal() {
             <div className="w-3 h-3 rounded-full bg-window-close mr-2"></div>
             <div className="w-3 h-3 rounded-full bg-window-minimize mr-2"></div>
             <div className="w-3 h-3 rounded-full bg-window-maximize mr-2"></div>
-            <h2 className="text-lg md:text-xl font-bold text-text">April Fools Reveal</h2>
+            <h2 className="text-lg md:text-xl font-bold text-text"></h2>
           </div>
           <div className="p-6">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-text">April Fools. But the job is no joke.</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-text">The Ultimate Tip</h2>
             
             <p className="mb-4 text-text">
-              Sure—Tips4SDRs.org is satire. But behind the parody is a serious truth.
+              If you haven't picked up on this yet--sure Tips4SDRs.org is satire. 
             </p>
             
             <p className="mb-4 text-text">
-              Being an SDR in 2025 is harder than ever. AI is everywhere, but using it meaningfully? 
-              Still a mystery. Deliverability is technical, not tactical. And "personalized outbound" 
-              now means knowing how to automate, analyze, and write—all at once.
+              However, Being an SDR in 2025 is harder than ever. AI is everywhere, but using it meaningfully is still a mystery. Sending emails with high deliverability is technical, and "personalized outbound" 
+              now means knowing how to automate, analyze, and write—all at once. 
             </p>
             
             <p className="font-bold mb-4 text-text">
-              Outbound is more complex. More demanding. More technical.
+              Good Outbound is complex, technical, and time-consuming.
             </p>
             
             <p className="text-text">
@@ -72,9 +71,9 @@ export default function AprilFoolsReveal() {
               </div>
             </div>
             <div className="p-4 pt-0">
-              <a href="#" className="block w-auto border border-border rounded bg-accent-panel shadow-bevel text-text hover:bg-alt-bg text-left h-14 flex items-center">
+              <a href="https://calendly.com/sean-reachorbit/demo" className="block w-auto border border-border rounded bg-accent-panel shadow-bevel text-text hover:bg-alt-bg text-left h-14 flex items-center">
                 <div className="p-3 w-full" data-component-name="AprilFoolsReveal">
-                  <span>Explore Orbit Labs <span className="ml-2">→</span></span>
+                  <span>Schedule Consultation <span className="ml-2">→</span></span>
                 </div>
               </a>
             </div>
@@ -112,7 +111,7 @@ export default function AprilFoolsReveal() {
               </div>
             </div>
             <div className="p-4 pt-0">
-              <a href="#" className="block w-auto border border-border rounded bg-accent-panel shadow-bevel text-text hover:bg-alt-bg text-left h-14 flex items-center">
+              <a href="https://orbitunibox.com" className="block w-auto border border-border rounded bg-accent-panel shadow-bevel text-text hover:bg-alt-bg text-left h-14 flex items-center">
                 <div className="p-3 w-full" data-component-name="AprilFoolsReveal">
                   <span>See Unibox in Action <span className="ml-2">→</span></span>
                 </div>
