@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTips } from '../context/TipContext';
 
-// Calculate tip statistics from sample data
-const tipStats = {
+// Base statistics for the start of the day
+const BASE_TIP_STATS = {
   count: 473,
   totalValue: 3845
+};
+
+// Maximum values for end of day (11:59 PM)
+const MAX_TIP_STATS = {
+  count: 10213,  // Max tip count by end of day
+  totalValue: 86033  // Max dollar value by end of day
 };
 
 const Hero = () => {
@@ -14,6 +20,50 @@ const Hero = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showTipForm, setShowTipForm] = useState(false);
   const { addTip } = useTips();
+  
+  // Dynamic tip statistics that increase over time
+  const [tipStats, setTipStats] = useState(BASE_TIP_STATS);
+  
+  // Effect to calculate tip statistics based on time of day
+  useEffect(() => {
+    // Function to calculate values based on time of day
+    const calculateTimeBasedStats = () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      
+      // Calculate how far through the day we are (0.0 to 1.0)
+      // 0.0 = midnight (start of day), 1.0 = 11:59 PM (end of day)
+      const minutesSinceMidnight = currentHour * 60 + currentMinute;
+      const totalMinutesInDay = 24 * 60;
+      const dayProgress = minutesSinceMidnight / totalMinutesInDay;
+      
+      // Apply a slight curve to make growth accelerate toward end of day
+      // Using a power function to create a curve (n^1.5 grows faster later in the day)
+      const growthFactor = Math.pow(dayProgress, 1.5);
+      
+      // Calculate current values based on progress through the day
+      const tipCount = Math.floor(BASE_TIP_STATS.count + 
+                        (MAX_TIP_STATS.count - BASE_TIP_STATS.count) * growthFactor);
+      
+      const tipValue = Math.floor(BASE_TIP_STATS.totalValue + 
+                        (MAX_TIP_STATS.totalValue - BASE_TIP_STATS.totalValue) * growthFactor);
+      
+      setTipStats({
+        count: tipCount,
+        totalValue: tipValue
+      });
+    };
+    
+    // Calculate initial values
+    calculateTimeBasedStats();
+    
+    // Update values every minute
+    const interval = setInterval(calculateTimeBasedStats, 60000);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
   
   // Tip form states
   const [tipFormData, setTipFormData] = useState({
@@ -173,7 +223,11 @@ const Hero = () => {
                 </div>
               ) : (
                 <form onSubmit={handleTipFormSubmit} className="space-y-4">
-                  <h3 className="text-lg font-bold text-text mb-2">Send a tip to your sales rep</h3>
+                  <h3 className="text-lg font-bold text-text mb-2" data-component-name="Hero">Send a tip to your sales rep</h3>
+                  <p className="text-sm text-text-muted mb-2 bg-info-bg border border-info-border p-2 rounded" data-component-name="Hero">
+                    By tipping a rep, we'll email you and whoever you tip a 1-month free access to the Slack Unibox.
+                  </p>
+                  
                   
                   <div>
                     <label className="block text-sm font-medium text-text-muted mb-1">Your Name*</label>
@@ -305,7 +359,7 @@ const Hero = () => {
                   ${tipStats.totalValue.toLocaleString()}**
                 </span>
                 <span className="block text-sm text-center mt-1">
-                  shared so far
+                  Tipped on Platform
                 </span>
               </div>
             </div>
@@ -344,9 +398,12 @@ const Hero = () => {
             </div>
             
             {/* Footnotes moved below button */}
-            <div className="text-[6.5px] space-y-1 text-text-muted italic mt-2">
-              <p>*These numbers are definitely real.</p>
-              <p>**As long as you add Orbit to your sales team's tech stack.</p>
+            <div className="mt-1 text-[10px] text-gray-400">
+              <div style={{ transform: 'scale(0.7)', transformOrigin: 'left top' }} className="mb-0 pb-0">
+                <small className="block leading-[10px]">*These numbers are definitely real.</small>
+                <small className="block leading-[10px]">**As long as you add Orbit to your sales team's tech stack.</small>
+                <small className="block leading-[10px]">***Tips4SDRs is a satire platform. We do not facilitate actual cash transactions or payments. April Fool's 2025.</small>
+              </div>
             </div>
           </div>
 
