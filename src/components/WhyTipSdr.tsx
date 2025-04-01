@@ -8,8 +8,8 @@ const WhyTipSdr = () => {
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex justify-center">
           <div className="w-full max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-text">Why Tip Your SDR?</h2>
-            <p className="text-xl md:text-2xl font-medium mb-8 text-text">Behind every closed deal is an SDR quietly doing the hard stuff. There are so many AI companies this year threatening to put them out of a job, and it's becoming harder and harder to run reliable outbound.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-text">Why Tip Your SDR?</h2>
+            <p className="text-xl md:text-2xl font-medium mb-10 text-text">Behind every closed deal is an SDR quietly doing the hard stuff. There are so many AI companies this year threatening to put them out of a job, and it's becoming harder and harder to run reliable outbound.</p>
             
             <div className="mb-8">
               <ul className="space-y-4">
@@ -40,15 +40,10 @@ const WhyTipSdr = () => {
               </ul>
             </div>
             
-            <p className="text-text text-xl mb-8">
+            <p className="text-text text-xl">
               This year, we want to say thanks in the most literal way possible—
               <span className="font-bold">by letting you tip them.</span>
             </p>
-            
-            <div className="bg-alt-bg p-5 border border-border shadow-bevel rounded-md">
-              <p className="text-text text-xl font-bold mb-2">Tip Your Rep is like Venmo for Sales Reps.</p>
-              <p className="text-text-muted text-lg">Show your appreciation with more than just a thank you email.</p>
-            </div>
           </div>
         </div>
       </div>
