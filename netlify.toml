@@ -4,14 +4,16 @@
 
 [build.environment]
   NEXT_RUNTIME = "edge"
+  NODE_VERSION = "18"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# We don't need this redirect for Next.js apps
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
 
 [dev]
   command = "npm run dev"

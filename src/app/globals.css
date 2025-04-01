@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
-
-/* Tailwind directives */
+/* Font imports via link tag in layout.tsx instead of CSS import */
+/* Use Tailwind directives for proper processing */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

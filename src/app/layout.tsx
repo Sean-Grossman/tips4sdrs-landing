@@ -45,12 +45,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`${montserrat.variable} ${openSans.variable} font-sans bg-background text-text`}>
+      <body className="font-open-sans bg-[#EDE3DC] text-[#2E2E2E]">
         {children}
       </body>
     </html>
