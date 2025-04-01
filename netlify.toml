@@ -7,6 +7,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+  [plugins.inputs]
+    # Enable experimental directory for forms support with Next.js App Router
+    # See: https://ntl.fyi/next-runtime-forms-migration
+    experimental_dir = "/public/forms"
 
 [[redirects]]
   from = "/*"
