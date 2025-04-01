@@ -243,6 +243,7 @@ const Hero = () => {
                   className="space-y-4"
                 >
                   <input type="hidden" name="form-name" value="tip-submission" />
+                  <input type="hidden" name="bot-field" />
                   <h3 className="text-lg font-bold text-text mb-2" data-component-name="Hero">Send a tip to your sales rep</h3>
                   <p className="text-sm text-text-muted mb-2 bg-info-bg border border-info-border p-2 rounded" data-component-name="Hero">
                     By tipping a rep, we'll email you and whoever you tip a 1-month free access to the Slack Unibox.
@@ -390,11 +391,11 @@ const Hero = () => {
                 name="subscribe" 
                 method="POST" 
                 data-netlify="true"
-                data-netlify-recaptcha="true"
                 onSubmit={handleEmailSubmit}
                 className="flex flex-col mb-4 space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2"
               >
                 <input type="hidden" name="form-name" value="subscribe" />
+                <input type="hidden" name="bot-field" />
                 <input 
                   type="email"
                   name="email" 

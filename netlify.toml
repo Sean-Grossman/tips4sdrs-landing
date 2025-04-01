@@ -17,6 +17,6 @@
 
 [dev]
   command = "npm run dev"
-  port = 3002
-  targetPort = 3002
-  framework = "nextjs"
+  port = 8888
+  targetPort = 3000
+  framework = "next"
