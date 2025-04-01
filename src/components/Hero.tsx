@@ -82,29 +82,14 @@ const Hero = () => {
     if (!email || !email.includes('@')) return;
     
     try {
-      // Send email to our API endpoint
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      // With Netlify Forms, the form will be submitted directly to Netlify
+      // We're just handling the client-side UX here
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+      setEmail('');
       
-      const data = await response.json();
-      
-      if (data.success) {
-        // Still store in localStorage for immediate feedback
-        localStorage.setItem('subscribedEmail', email);
-        
-        // Show success notification
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000);
-        setEmail('');
-      } else {
-        console.error('Failed to save email:', data.message);
-        alert('Something went wrong. Please try again.');
-      }
+      // Still store in localStorage for immediate feedback
+      localStorage.setItem('subscribedEmail', email);
     } catch (error) {
       console.error('Error submitting email:', error);
       alert('Something went wrong. Please try again.');
@@ -139,7 +124,7 @@ const Hero = () => {
     const amount = parseFloat(tipFormData.tipAmount.replace(/[^0-9.]/g, ''));
     
     try {
-      // First, add the tip to our context for immediate UI feedback
+      // Add the tip to our context for immediate UI and reaction system update
       addTip({
         sender: tipFormData.name,
         recipient: tipFormData.recipientName,
@@ -147,28 +132,8 @@ const Hero = () => {
         note: tipFormData.message || 'Thanks for your help!'
       });
       
-      // Then, send the complete tip data to our API
-      const response = await fetch('/api/tips', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: tipFormData.name,
-          email: tipFormData.email,
-          recipientName: tipFormData.recipientName,
-          recipientEmail: tipFormData.recipientEmail,
-          message: tipFormData.message,
-          amount: isNaN(amount) ? 10 : amount
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!data.success) {
-        console.error('Failed to save tip data:', data.message);
-        // Continue with UI flow since we've already updated the context
-      }
+      // With Netlify Forms, the form data will be automatically collected
+      // No need for custom API calls
       
       // Show success state
       setTipFormSubmitted(true);
@@ -269,7 +234,15 @@ const Hero = () => {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleTipFormSubmit} className="space-y-4">
+                <form 
+                  name="tip-submission" 
+                  method="POST" 
+                  data-netlify="true"
+                  data-netlify-recaptcha="true"
+                  onSubmit={handleTipFormSubmit} 
+                  className="space-y-4"
+                >
+                  <input type="hidden" name="form-name" value="tip-submission" />
                   <h3 className="text-lg font-bold text-text mb-2" data-component-name="Hero">Send a tip to your sales rep</h3>
                   <p className="text-sm text-text-muted mb-2 bg-info-bg border border-info-border p-2 rounded" data-component-name="Hero">
                     By tipping a rep, we'll email you and whoever you tip a 1-month free access to the Slack Unibox.
@@ -412,14 +385,24 @@ const Hero = () => {
             </div>
             
             <div className="pt-3 text-center space-y-3">
-              {/* Email subscription form with XP styling */}
-              <form onSubmit={handleEmailSubmit} className="flex items-center w-full max-w-md mx-auto">
+              {/* Email subscription form */}
+              <form 
+                name="subscribe" 
+                method="POST" 
+                data-netlify="true"
+                data-netlify-recaptcha="true"
+                onSubmit={handleEmailSubmit}
+                className="flex flex-col mb-4 space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2"
+              >
+                <input type="hidden" name="form-name" value="subscribe" />
                 <input 
-                  type="email" 
+                  type="email"
+                  name="email" 
                   placeholder="Enter your email"
                   className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <button 
                   type="submit"
