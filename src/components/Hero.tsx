@@ -1,0 +1,370 @@
+"use client";
+
+import React, { useState } from 'react';
+import { useTips } from '../context/TipContext';
+
+// Calculate tip statistics from sample data
+const tipStats = {
+  count: 473,
+  totalValue: 3845
+};
+
+const Hero = () => {
+  const [email, setEmail] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [showTipForm, setShowTipForm] = useState(false);
+  const { addTip } = useTips();
+  
+  // Tip form states
+  const [tipFormData, setTipFormData] = useState({
+    name: '',
+    email: '',
+    recipientName: '',
+    recipientEmail: '',
+    message: '',
+    tipAmount: ''
+  });
+  const [tipFormSubmitted, setTipFormSubmitted] = useState(false);
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes('@')) return;
+    
+    try {
+      // In a real app, you would send this to your API
+      console.log('Email submitted:', email);
+      
+      // For now, we'll just simulate storing it
+      localStorage.setItem('subscribedEmail', email);
+      
+      // Show the notification
+      setShowNotification(true);
+      
+      // Clear the form
+      setEmail('');
+      
+      // Hide notification after 5 seconds
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
+    } catch (error) {
+      console.error('Error submitting email:', error);
+    }
+  };
+  
+  const handleTipFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTipFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  const handleTipFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!tipFormData.name || !tipFormData.email || !tipFormData.recipientName || !tipFormData.tipAmount) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(tipFormData.email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    
+    // Convert tipAmount to a number
+    const amount = parseFloat(tipFormData.tipAmount.replace(/[^0-9.]/g, ''));
+    
+    // Add the tip to our context
+    addTip({
+      sender: tipFormData.name,
+      recipient: tipFormData.recipientName,
+      amount: isNaN(amount) ? 10 : amount, // Default to 10 if parsing fails
+      note: tipFormData.message || 'Thanks for your help!'
+    });
+    
+    // Process form submission
+    console.log('Tip form submitted:', tipFormData);
+    
+    // Show success state
+    setTipFormSubmitted(true);
+    
+    // Close form after delay
+    setTimeout(() => {
+      setTipFormSubmitted(false);
+      setShowTipForm(false);
+      // Reset form
+      setTipFormData({
+        name: '',
+        email: '',
+        recipientName: '',
+        recipientEmail: '',
+        message: '',
+        tipAmount: ''
+      });
+    }, 3000);
+  };
+
+  return (
+    <section className="py-12 md:py-16 bg-primary-bg relative">
+      {/* Windows XP-style notification popup */}
+      {showNotification && (
+        <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 animate-slide-in-top">
+          <div className="bg-[#F5F1E4] border border-[#75736D] rounded-md w-80 shadow-bevel">
+            <div className="bg-gradient-to-r from-[#0057A7] to-[#097DD5] py-1.5 px-2 flex justify-between items-center rounded-t-md">
+              <div className="flex items-center">
+                <span className="text-white text-sm font-semibold">Information</span>
+              </div>
+              <button 
+                onClick={() => setShowNotification(false)}
+                className="text-white font-bold text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4">
+              <p className="text-sm">
+                Thx for doing that — you saved me from sending one of those 'we noticed you lurking' emails.
+              </p>
+              <div className="mt-3 flex justify-end">
+                <button 
+                  onClick={() => setShowNotification(false)}
+                  className="px-4 py-1 bg-[#ECE9D8] border border-[#7F9DB9] rounded text-sm shadow-bevel"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Tip Form Popup */}
+      {showTipForm && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-[#F5F1E4] border border-[#75736D] rounded-md w-full max-w-md max-h-[90vh] overflow-y-auto shadow-bevel">
+            <div className="bg-gradient-to-r from-[#0057A7] to-[#097DD5] py-1.5 px-2 flex justify-between items-center rounded-t-md">
+              <div className="flex items-center">
+                <span className="text-white text-sm font-semibold">Tip a Rep</span>
+              </div>
+              <button 
+                onClick={() => setShowTipForm(false)}
+                className="text-white font-bold text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="p-6">
+              {tipFormSubmitted ? (
+                <div className="flex flex-col items-center justify-center py-6">
+                  <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <h3 className="text-xl font-bold text-text mb-2">Tip Submitted!</h3>
+                  <p className="text-text-muted text-center">
+                    Your tip has been submitted successfully.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleTipFormSubmit} className="space-y-4">
+                  <h3 className="text-lg font-bold text-text mb-2">Send a tip to your sales rep</h3>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Your Name*</label>
+                    <input 
+                      type="text" 
+                      name="name"
+                      value={tipFormData.name}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Your Email*</label>
+                    <input 
+                      type="email" 
+                      name="email"
+                      value={tipFormData.email}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Rep Name*</label>
+                    <input 
+                      type="text" 
+                      name="recipientName"
+                      value={tipFormData.recipientName}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Rep Email</label>
+                    <input 
+                      type="email" 
+                      name="recipientEmail"
+                      value={tipFormData.recipientEmail}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Tip Amount*</label>
+                    <input 
+                      type="text" 
+                      name="tipAmount"
+                      value={tipFormData.tipAmount}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                      placeholder="20%"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-muted mb-1">Message</label>
+                    <textarea 
+                      name="message"
+                      value={tipFormData.message}
+                      onChange={handleTipFormChange}
+                      className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                      rows={3}
+                      placeholder="Thanks for all your help!"
+                    ></textarea>
+                  </div>
+                  
+                  <div className="flex justify-end space-x-3 pt-2">
+                    <button 
+                      type="button"
+                      onClick={() => setShowTipForm(false)}
+                      className="px-4 py-1 bg-[#ECE9D8] border border-[#7F9DB9] rounded text-sm shadow-bevel"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      className="px-4 py-1 bg-gradient-to-b from-[#0057A7] to-[#097DD5] text-white border border-[#0057A7] rounded text-sm shadow-sm"
+                    >
+                      Submit Tip
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+        <div className="flex flex-col md:flex-row items-stretch justify-between gap-8">
+          {/* Left Column (Text Block) - XP-style panel */}
+          <div className="md:w-1/2 space-y-5 flex flex-col justify-center h-full px-5 py-4 border border-border shadow-bevel bg-window rounded-md">
+            <div>
+              <span className="font-medium text-white px-3 py-1.5 rounded bg-gradient-to-b from-blue-500 to-blue-700 border border-blue-800 shadow-sm inline-block">
+                Introducing Tips4SDRs
+              </span>
+            </div>
+            
+            <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-text uppercase tracking-tight leading-tight">
+              A tipping platform for sales teams.
+            </h1>
+            <hr className="xp-divider" />
+            
+            <div className="space-y-3">
+              <p className="text-lg text-text-muted font-medium">
+                Join the tipping platform designed exclusively for sales professionals.
+              </p>
+            </div>
+            
+            {/* Statistics in two columns with footnotes */}
+            <div className="grid grid-cols-2 gap-4 mt-3">
+              <div className="bg-white border border-border shadow-bevel flex flex-col justify-center items-center h-24 py-2 hover:bg-blue-50 transition-colors w-4/5 mx-auto">
+                <span className="block font-semibold text-link-blue text-xl text-center">
+                  {tipStats.count}*
+                </span>
+                <span className="block text-sm text-center mt-1">
+                  tips
+                </span>
+              </div>
+              <div className="bg-white border border-border shadow-bevel flex flex-col justify-center items-center h-24 py-2 hover:bg-blue-50 transition-colors w-4/5 mx-auto">
+                <span className="block font-semibold text-link-blue text-xl text-center">
+                  ${tipStats.totalValue.toLocaleString()}**
+                </span>
+                <span className="block text-sm text-center mt-1">
+                  shared so far
+                </span>
+              </div>
+            </div>
+            
+            <div className="pt-3 text-center space-y-3">
+              {/* Email subscription form with XP styling */}
+              <form onSubmit={handleEmailSubmit} className="flex items-center w-full max-w-md mx-auto">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email"
+                  className="px-3 py-2 w-full border border-border shadow-inner bg-white rounded text-sm focus:outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <button 
+                  type="submit"
+                  className="ml-2 px-3 py-2 bg-gradient-to-b from-blue-500 to-blue-700 text-white border border-blue-800 rounded text-sm shadow-sm"
+                >
+                  Subscribe
+                </button>
+              </form>
+              
+              {/* Divider with -or- text */}
+              <div className="flex items-center justify-center">
+                <hr className="w-12 border-t border-border" />
+                <span className="px-3 text-xs text-text-muted">-or-</span>
+                <hr className="w-12 border-t border-border" />
+              </div>
+              
+              <button 
+                onClick={() => setShowTipForm(true)}
+                className="cta-button inline-block"
+              >
+                Tip a Rep
+              </button>
+            </div>
+            
+            {/* Footnotes moved below button */}
+            <div className="text-[6.5px] space-y-1 text-text-muted italic mt-2">
+              <p>*These numbers are definitely real.</p>
+              <p>**As long as you add Orbit to your sales team's tech stack.</p>
+            </div>
+          </div>
+
+          {/* Right Column (Image) - XP-style frame */}
+          <div className="md:w-1/2 flex justify-center items-center h-full py-4">
+            <div className="relative w-full max-w-[400px] border border-border shadow-bevel bg-window rounded-md p-2">
+              {/* Using the provided hero image */}
+              <img 
+                src="/images/Hero2Updated.png" 
+                alt="Young SDR in an oversized suit holding a WeWork mug" 
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;

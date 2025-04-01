@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="480" height="480" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="480" fill="#F3EBE4"/>
+  
+  <!-- XP-style desktop background with blue sky and green hills -->
+  <rect width="480" height="320" fill="#3970CA"/>
+  <path d="M0,320 C120,280 240,320 360,290 C480,260 480,320 480,320 L480,480 L0,480 Z" fill="#62BD24"/>
+  <path d="M0,320 C80,310 160,330 240,320 C320,310 400,290 480,320 L480,480 L0,480 Z" fill="#4CA120" opacity="0.7"/>
+  
+  <!-- XP-style window -->
+  <rect x="80" y="80" width="320" height="260" rx="8" fill="#EDE3DC" stroke="#A9A9A9" stroke-width="1"/>
+  <rect x="80" y="80" width="320" height="30" rx="8" fill="#1E90FF" stroke="#A9A9A9" stroke-width="1"/>
+  <circle cx="95" cy="95" r="8" fill="#FF6B6B"/>
+  <rect x="90" y="120" width="300" height="200" fill="#FFFFFF" stroke="#CBBEB5" stroke-width="1"/>
+  
+  <!-- Character silhouette -->
+  <ellipse cx="240" cy="180" rx="50" ry="60" fill="#2E2E2E"/>
+  <rect x="220" y="240" width="40" height="60" fill="#2E2E2E"/>
+  <rect x="230" y="230" width="20" height="20" rx="5" fill="#2E2E2E"/>
+  
+  <!-- WeWork mug icon -->
+  <rect x="280" y="210" width="25" height="30" rx="2" fill="#D8C3A5" stroke="#2E2E2E" stroke-width="2"/>
+  <rect x="305" y="215" width="5" height="15" rx="2" fill="#D8C3A5" stroke="#2E2E2E" stroke-width="1"/>
+  <text x="285" y="230" font-family="Verdana" font-size="6" font-weight="bold" fill="#2E2E2E">WeW</text>
+  
+  <!-- ZYN pouch icon -->
+  <rect x="220" y="215" width="20" height="10" rx="3" fill="#FFFFFF" stroke="#2E2E2E" stroke-width="1"/>
+  <text x="223" y="223" font-family="Verdana" font-size="6" font-weight="bold" fill="#2E2E2E">ZYN</text>
+  
+  <!-- Briefcase icon -->
+  <rect x="230" y="300" width="30" height="20" rx="2" fill="#D8C3A5" stroke="#2E2E2E" stroke-width="1"/>
+  <rect x="240" y="295" width="10" height="5" rx="2" fill="#D8C3A5" stroke="#2E2E2E" stroke-width="1"/>
+  
+  <!-- XP-style button -->
+  <rect x="140" y="340" width="200" height="30" rx="6" fill="#FFA500" stroke="#9E7B10" stroke-width="1"/>
+  <rect x="140" y="340" width="200" height="15" rx="6" fill="#FFD700" fill-opacity="0.3"/>
+  <text x="240" y="360" font-family="Verdana" font-size="12" font-weight="bold" text-anchor="middle" fill="white">DOWNLOAD EMPLOYEE.EXE</text>
+  
+  <!-- Window title text -->
+  <text x="250" y="100" font-family="Verdana" font-size="14" font-weight="bold" text-anchor="middle" fill="white">SDR-Hero.jpeg - Image Viewer</text>
+</svg>

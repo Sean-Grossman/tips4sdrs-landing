@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
+
+/* Import Tailwind directives - using comments to avoid lint errors */
+/* purgecss start ignore */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* purgecss end ignore */
+
+:root {
+  --primary-bg: #EDE3DC;
+  --alt-bg: #D8C3A5;
+  --accent-panel: #F3EBE4;
+  --border: #CBBEB5;
+  --cta: #FFA500;
+  --link-blue: #1E90FF;
+  --text: #2E2E2E;
+  --text-muted: #5A5A5A;
+}
+
+html,
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text);
+  background: var(--primary-bg);
+  scroll-behavior: smooth;
+  letter-spacing: -0.01em; /* Slight tighter spacing like old UIs */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.caption {
+  font-size: 14px;
+  text-transform: uppercase; /* XP-style caption */
+  letter-spacing: 0.05em;
+}
+
+/* XP-style button with bevel effect */
+.cta-button {
+  background-color: var(--cta);
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4), 
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cta-button:hover {
+  background-color: var(--cta);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6), 
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button:active {
+  box-shadow: 
+    inset 0 2px 3px rgba(0, 0, 0, 0.2);
+  transform: translateY(1px);
+}
+
+.nav-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  background-color: var(--accent-panel);
+  color: var(--link-blue);
+}
+
+/* XP-style card with beveled effect */
+.tip-card {
+  background: var(--accent-panel);
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.12), 
+    0 1px 2px rgba(0, 0, 0, 0.24);
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.reaction-icon {
+  transition: transform 0.2s ease;
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.reaction-icon:hover {
+  transform: scale(1.05);
+  background-color: var(--primary-bg);
+}
+
+/* XP-style panel */
+.xp-panel {
+  background-color: var(--accent-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+}
+
+/* Horizontal rule in XP style */
+.xp-divider {
+  height: 1px;
+  background-color: var(--border);
+  margin: 16px 0;
+  border: none;
+}
+
+/* Section with alt background */
+.alt-section {
+  background-color: var(--alt-bg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
